@@ -1,0 +1,2 @@
+# SearchIt_BaiGoogleDuWithReverseProxy
+具有反向代理功能的仿制版百Google度(baigoogledu)
