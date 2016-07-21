@@ -17,6 +17,7 @@
   
 ### 使用方法
 默认配置下：  
+
 - index.php  首页  
 - search.php?q=test 搜索test	 
 - proxy/proxy.php 反向代理
@@ -28,12 +29,12 @@
 
     $googleurl='./proxy/proxy.php?engine=google&q=';
     $baiduurl='./proxy/proxy.php?engine=baidu&q=';
- 
+此时两个iframe中的内容由服务器端，proxy.php向google.com等发出请求，然后将结果转发给浏览器。  
 如需直接连接，设置为：
 
     $googleurl = 'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=';
     $baiduurl = 'https://www.baidu.com/s?ie=utf-8&rn=20&wd=';
-
+此时两个iframe由浏览器直接发出请求。
 #### 反向代理配置
 修改`proxy_conf.php`。  
 `url`指定访问的url（不含被搜索字符串）。`proxy`,`proxyHost`,`proxyPort`设置服务器的上层代理服务器。如果使用SSL，需要设置`sslCert`设置证书。`beautyFunc`指定进一步处理响应HTML的函数名。
@@ -41,13 +42,20 @@
 	$googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=',
 		'proxy'=>true,
 		'proxyHost'=>'127.0.0.1',
-		'proxyPort'=>11562,
+		'proxyPort'=>8080,
 		'sslCert'=>getcwd() . "/cert/google.com.crt",
 		'beautyFunc'=>'googleBeauty'];
 	
 	function googleBeauty($html){
 		return str_replace('<div id="center_col">', '<div id="center_col" style="margin:0;">', $html);
 	}
+
+#### proxy.php curl无法使用的情况
+如果运行时出错：`PHP Fatal error:  Call to undefined function curl_init()`，解决方法：
+
+- 安装[php_curl库](http://php.net/manual/zh/book.curl.php)  
+- 如果无法安装（如GAE目前不支持curl），在proxy.php 中提供了替代函数`searchNoProxy`，此函数使用`file_get_contents`替代`curl`。请将`searchNoProxy`取消注释，删除或注释`httpGetProxy`和`search`函数。
+
 
 ### 测试
 - test

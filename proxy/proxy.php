@@ -60,6 +60,20 @@ function search($keyword,$engineConf){
     return $html;
 }
 
+// substitute function. use file_get_contents instead of curl.
+// no proxy.
+// if curl not works, comment these functions above: httpGetProxy search, uncomment this function
+// and then modify use searchNoProxy(@$_GET['q'], $baiduConf) instead of search(@$_GET['q'], $baiduConf) below
+/*
+function searchNoProxy($keyword,$engineConf){
+    $html = file_get_contents($engineConf['url'] . urlencode($keyword));
+    if($html !== false){
+        $html =  $engineConf['beautyFunc']($html);// post-process function
+    }
+    return $html;
+}
+*/
+
 switch (strtolower(@$_GET['engine'])) {
     case 'baidu':
         echo search(@$_GET['q'], $baiduConf);
