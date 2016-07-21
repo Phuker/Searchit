@@ -5,7 +5,8 @@ $baiduConf = ['url'=>'https://www.baidu.com/s?ie=utf-8&rn=20&wd=',
 	'proxyHost'=>'',
 	'proxyPort'=>0,
 	'sslCert'=>getcwd() . "/cert/baidu.com.crt",
-	'beautyFunc'=>'baiduBeauty'];
+	'beautyFunc'=>'baiduBeauty',
+	'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
 function baiduBeauty($html){
 	$html = str_replace('<form id="form" name="f" action="/s" class="fm">', '<form id="form" name="f" action="" class="fm"><input type="hidden" name="engine" value="baidu">', $html);
 	$html = str_replace('<input id="kw" name="wd" class="s_ipt" value="', '<input id="kw" name="q" class="s_ipt" value="', $html);
@@ -17,11 +18,11 @@ $googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwin
 	'proxyHost'=>'127.0.0.1',
 	'proxyPort'=>8080,
 	'sslCert'=>getcwd() . "/cert/google.com.crt",
-	'beautyFunc'=>'googleBeauty'];
+	'beautyFunc'=>'googleBeauty',
+	'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
 
 function googleBeauty($html){
 	$html = str_replace('<form class="tsf" action="/search" style="overflow:visible" id="tsf" method="GET" name="f" onsubmit="return q.value!=\'\'" role="search">', '<form class="tsf" action="" style="overflow:visible" id="tsf" method="GET" name="f" onsubmit="return q.value!=\'\'" role="search"><input type="hidden" name="engine" value="google">', $html);
 	$html = str_replace('<div class="sbibtd">', '<div class="sbibtd" style="width:500px;">', $html);
 	return str_replace('<div id="center_col">', '<div id="center_col" style="margin:0;">', $html);
 }
-
