@@ -24,5 +24,10 @@ $googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwin
 function googleBeauty($html){
 	$html = str_replace('<form class="tsf" action="/search" style="overflow:visible" id="tsf" method="GET" name="f" onsubmit="return q.value!=\'\'" role="search">', '<form class="tsf" action="" style="overflow:visible" id="tsf" method="GET" name="f" onsubmit="return q.value!=\'\'" role="search"><input type="hidden" name="engine" value="google">', $html);
 	$html = str_replace('<div class="sbibtd">', '<div class="sbibtd" style="width:500px;">', $html);
+
+	$html = preg_replace_callback('/<a href="\/url\\?q=([^"]*?)&amp;[^"]*?"/', 
+		function ($matches){
+			return '<a href="' . urldecode($matches[1]) . '"';
+		}, $html);
 	return str_replace('<div id="center_col">', '<div id="center_col" style="margin:0;">', $html);
 }
