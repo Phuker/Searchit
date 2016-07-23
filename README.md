@@ -62,7 +62,8 @@
 			 $html);
 	}
   
-有时百度根据UserAgent不支持HTTPS(也可能国外某些地区没有HTTPS)（例如GAE，表现为file_get_contents()请求proxy.php时无限刷新，原因是实际会返回JavaScript：`location.replace(location.href.replace("https://","http://"));`等。此时将proxy_conf.php中`https://www.baidu.com/`改为`http://www.baidu.com/`。  
+有时百度根据UserAgent不支持HTTPS(*也可能国外某些地区没有HTTPS*)（例如GAE，表现为`file_get_contents()`请求proxy.php时无限刷新，原因是实际会返回JavaScript：`location.replace(location.href.replace("https://","http://"));`等。此时将proxy_conf.php中`https://www.baidu.com/`改为`http://www.baidu.com/`。  
+用GAE的App Engine SDK 1.9.40测试发现，此环境的`file_get_contents()`无法正常设置资源流上下文。UserAgent保持为：` 'AppEngine-Google; (+http://code.google.com/appengine; appid: dev~xxxxxxx)'`。推测GAE上有相同的问题。
 
 #### 关于curl 和 file_get_contents()两种获取网页方式
 使用curl可以较好地使用代理服务器，但是需要安装该extension，HTTPS如果出现验证证书错误需要手动提供证书（/proxy/cert目录）。  
