@@ -26,18 +26,22 @@
 - `curl_search.inc.php` 使用 `curl`获取网页的被包含文件
 
 ### 配置:config.php
-#### search.php中的两个iframe的src属性
-设置config.php 中的`$googleurl`和`$baiduurl`。这两个URL由浏览器请求。如需使用此项目中的代理，则需设置为：
+#### 浏览器相关（search.php中的两个iframe的src属性）
+设置config.php 中的`$googleurl`和`$baiduurl`。这两个URL由**浏览器**请求。如需使用此项目中的代理，则需设置为：
 
     $googleurl='./proxy/proxy.php?engine=google&q=';
     $baiduurl='./proxy/proxy.php?engine=baidu&q=';
 此时两个iframe中的内容由服务器端，proxy.php向google.com等发出请求，然后将结果转发给浏览器。  
-如需直接连接，设置为：
+如需直接连接（谷歌不推荐），设置为：
 
     $googleurl = 'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=';
     $baiduurl = 'https://www.baidu.com/s?ie=utf-8&rn=20&wd=';
-此时两个iframe由浏览器直接发出请求。
-#### 反向代理模块配置
+此时百度和谷歌两个iframe由浏览器直接发出请求。  
+**警告：此选项控制浏览器访问百度和谷歌的方式，如果浏览器在国内则无法正常访问谷歌**  
+**警告：由于Google的frame同源策略（x-frame-options:SAMEORIGIN），Google即使能连接也会无法正常显示。**  
+
+
+#### 服务器相关：反向代理模块配置
 以`$googleConf`数组为例，`url`指定访问的url（不含被搜索字符串）。`proxy`,`proxyHost`,`proxyPort`,`proxyType`设置服务器的上层代理服务器。如果`proxy`为`false`，则其他代理设置会被忽略。`proxyType`支持`http`、`socks4`、`socks4a`、`socks5`、`socks5h` 方式，推荐使用`socks5h`（即 `CURLPROXY_SOCKS5_HOSTNAME`），可以防止DNS污染。用curl方式时，如果使用SSL，需要设置`sslCert`设置证书。`beautyFunc`指定进一步处理响应HTML的函数名。`userAgent`设置服务端请求网页时使用的UserAgent字符串。
 下例中，`googleBeauty`函数将服务端获取到的网页做进一步处理，适应iframe较窄的宽度。
 

@@ -20,7 +20,9 @@ function httpGetProxy($url,$httpProxy=null,$userAgent=null){
 
 function search($keyword,$engineConf){
 	if($engineConf['proxy'] === true){
-        $httpProxy = ['proxyHost'=>$engineConf['proxyHost'],'proxyPort'=>$engineConf['proxyPort']];
+        $httpProxy = ['proxyHost'=>$engineConf['proxyHost'],
+                    'proxyPort'=>$engineConf['proxyPort'],
+                    'proxyType'=>$engineConf['proxyType']];
     } else {
         $httpProxy = null;
     }
