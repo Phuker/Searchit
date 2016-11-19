@@ -1,12 +1,15 @@
 <?php
+// iframe src
+$googleurl='./proxy/proxy.php?engine=google&q='; // 
+$baiduurl='./proxy/proxy.php?engine=baidu&q=';
+
 // 上层代理
 $baiduConf = ['url'=>'https://www.baidu.com/s?ie=utf-8&rn=20&wd=',
-	'proxy'=>false,
-	'proxyHost'=>'',
-	'proxyPort'=>0,
-	'sslCert'=>getcwd() . "/cert/baidu.com.crt",
-	'beautyFunc'=>'baiduBeauty',
-	'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
+			'proxy'=>false,
+			'sslCert'=>getcwd() . "/cert/baidu.com.crt",
+			'beautyFunc'=>'baiduBeauty',
+			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
+			
 function baiduBeauty($html){
 	$html = str_replace('<form id="form" name="f" action="/s" class="fm">', '<form id="form" name="f" action="" class="fm"><input type="hidden" name="engine" value="baidu">', $html);
 	$html = str_replace('<input id="kw" name="wd" class="s_ipt" value="', '<input id="kw" name="q" class="s_ipt" value="', $html);
@@ -14,12 +17,13 @@ function baiduBeauty($html){
 }
 
 $googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=',
-	'proxy'=>true,
-	'proxyHost'=>'127.0.0.1',
-	'proxyPort'=>8080,
-	'sslCert'=>getcwd() . "/cert/google.com.crt",
-	'beautyFunc'=>'googleBeauty',
-	'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
+			'proxy'=>true,
+			'proxyHost'=>'127.0.0.1',
+			'proxyPort'=>8080,
+			'proxyType'=>'http',
+			'sslCert'=>getcwd() . "/cert/google.com.crt",
+			'beautyFunc'=>'googleBeauty',
+			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
 
 function googleBeauty($html){
 	$html = preg_replace('/<form([^>]*)action="[^"]*"([^>]*)>/', '<form${1}action=""${2}><input type="hidden" name="engine" value="google">', $html);

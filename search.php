@@ -1,4 +1,5 @@
 <?PHP
+require('config.php');
 function filter($str) {
 	// HTML Entity
 	$str = trim ( htmlspecialchars ( $str, ENT_QUOTES ) );
@@ -18,8 +19,6 @@ $getArg='q';    //GET method argument
 //$googleurl = 'http://www.gufensoso.com/search/?q='; //自动变成全网页
 //$googleurl='http://www.google.com/custom?btnG=Search&newwindow=1&q='; //原始
 
-$googleurl='./proxy/proxy.php?engine=google&q='; // local proxy
-$baiduurl='./proxy/proxy.php?engine=baidu&q=';
 $keyword = filter($_GET[$getArg]);
 $keyword_link = urlencode($_GET[$getArg]);
 ?>

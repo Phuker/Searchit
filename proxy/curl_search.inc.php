@@ -15,7 +15,38 @@ function httpGetProxy($url,$httpProxy=null,$sslCert=null,$userAgent=null){
     curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
 
     if($httpProxy !== null){
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+        $type = @$httpProxy['proxyType'];
+        if(is_string($type)){
+            $type = strtolower($type);
+            switch ($type) {
+                case 'curlproxy_http':
+                case 'http':
+                    $type = CURLPROXY_HTTP;
+                    break;
+                case 'curlproxy_socks4':
+                case 'socks4':
+                    $type = CURLPROXY_SOCKS4;
+                    break;
+                case 'curlproxy_socks5':
+                case 'socks5':
+                    $type = CURLPROXY_SOCKS5;
+                    break;
+                case 'curlproxy_socks4a':
+                case 'socks4a':
+                    $type = CURLPROXY_SOCKS4A;
+                    break;
+                case 'curlproxy_socks5_hostname':
+                case 'socks5h':
+                    $type = CURLPROXY_SOCKS5_HOSTNAME;
+                    break;
+                default:
+                    $type = CURLPROXY_HTTP;
+                    break;
+            }
+        } elseif(!is_int($type)){
+            $type = CURLPROXY_HTTP;
+        } 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, $type);
         curl_setopt($ch, CURLOPT_PROXY, $httpProxy['proxyHost']);
         curl_setopt($ch, CURLOPT_PROXYPORT, $httpProxy['proxyPort']);
         curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);

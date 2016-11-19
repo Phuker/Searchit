@@ -1,5 +1,5 @@
 <?php
-require('proxy_conf.php');
+require('../proxy_conf.php');
 
 if(extension_loaded('curl')){
     require('curl_search.inc.php');
