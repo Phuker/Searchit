@@ -42,7 +42,12 @@
 
 
 #### 服务器相关：反向代理模块配置
-以`$googleConf`数组为例，`url`指定访问的url（不含被搜索字符串）。`proxy`,`proxyHost`,`proxyPort`,`proxyType`设置服务器的上层代理服务器。如果`proxy`为`false`，则其他代理设置会被忽略。`proxyType`支持`http`、`socks4`、`socks4a`、`socks5`、`socks5h` 方式，推荐使用`socks5h`（即 `CURLPROXY_SOCKS5_HOSTNAME`），可以防止DNS污染。用curl方式时，如果使用SSL，需要设置`sslCert`设置证书。`beautyFunc`指定进一步处理响应HTML的函数名。`userAgent`设置服务端请求网页时使用的UserAgent字符串。
+以`$googleConf`数组为例：  
+`url`指定访问的url（不含被搜索字符串）。  
+`proxy`,`proxyHost`,`proxyPort`,`proxyType`设置服务器的上层代理服务器。如果`proxy`为`false`，则其他代理设置会被忽略。使用`curl`时，可以通过设置`proxyType`支持`http`、`socks4`、`socks4a`、`socks5`、`socks5h`代理，推荐使用`socks5h`（即 `CURLPROXY_SOCKS5_HOSTNAME`），可以防止DNS污染。**警告：file_get_contents()好像只支持HTTP代理**  
+用curl方式时，如果使用SSL，需要设置`sslCert`设置证书。  
+`beautyFunc`指定进一步处理响应HTML的函数名。  
+`userAgent`设置服务端请求网页时使用的UserAgent字符串。  
 下例中，`googleBeauty`函数将服务端获取到的网页做进一步处理，适应iframe较窄的宽度。
 
 	$googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=',
@@ -71,7 +76,7 @@
 
 #### 关于`curl` 和 `file_get_contents()`两种获取网页方式
 使用curl可以较好地使用代理服务器，但是需要安装该extension，HTTPS如果出现验证证书错误需要手动提供证书（/proxy/cert目录）。  
-`file_get_contents()`无需安装extension，可以在GAE上直接使用。理论上用其`$context`参数可以控制使用代理服务器，但是在本机测试无法正常使用，出现各种错误。  
+`file_get_contents()`无需安装extension，可以在GAE上直接使用。理论上用其`$context`参数可以控制使用代理服务器，但是在本机测试无法正常使用，出现各种错误。**（似乎只能代理HTTP，无法代理HTTPS）**  
 目前`proxy/proxy.php`自动判断是否安装`curl`库，根据结果require:优先`curl_search.inc.php`，其次`file_get_contents_search.inc.php`。  
 
 附：安装[php_curl库](http://php.net/manual/zh/book.curl.php)  
