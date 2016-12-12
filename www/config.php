@@ -26,6 +26,8 @@ $googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwin
 			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
 
 function googleBeauty($html){
+	// Change the domain of this link below if your Google url is not ".com"
+	$html = '<base href="https://www.google.com/" target="_blank" />'.$html;
 	$html = preg_replace('/<form([^>]*)action="[^"]*"([^>]*)>/', '<form${1}action=""${2}><input type="hidden" name="engine" value="google">', $html);
 	$html = str_replace('<div class="sbibtd">', '<div class="sbibtd" style="width:500px;">', $html);
 

@@ -77,6 +77,7 @@
 #### 关于`curl` 和 `file_get_contents()`两种获取网页方式
 使用curl可以较好地使用代理服务器，但是需要安装该extension，HTTPS如果出现验证证书错误需要手动提供证书（/proxy/cert目录）。  
 `file_get_contents()`无需安装extension，可以在GAE上直接使用。理论上用其`$context`参数可以控制使用代理服务器，但是在本机测试无法正常使用，出现各种错误。**（似乎只能代理HTTP，无法代理HTTPS）**  
+**由于file_get_contents()设置代理复杂而且缺乏功能和文档，建议使用前者，放弃后者。**  
 目前`proxy/proxy.php`自动判断是否安装`curl`库，根据结果require:优先`curl_search.inc.php`，其次`file_get_contents_search.inc.php`。  
 
 附：安装[php_curl库](http://php.net/manual/zh/book.curl.php)  
