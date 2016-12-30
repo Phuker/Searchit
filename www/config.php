@@ -30,7 +30,7 @@ function googleBeauty($html){
 	$html = '<base href="https://www.google.com/" target="_blank" />'.$html;
 	$html = preg_replace('/<form([^>]*)action="[^"]*"([^>]*)>/', '<form${1}action=""${2}><input type="hidden" name="engine" value="google">', $html);
 	$html = str_replace('<div class="sbibtd">', '<div class="sbibtd" style="width:500px;">', $html);
-
+	$html = preg_replace('/onmousedown="[^"]*"/','',$html); // links
 	$html = preg_replace_callback('/<a href="\/url\\?q=([^"]*?)&amp;[^"]*?"/', 
 		function ($matches){
 			return '<a href="' . urldecode($matches[1]) . '"';
