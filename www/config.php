@@ -7,7 +7,7 @@ $baiduurl='./proxy/proxy.php?engine=baidu&q=';
 $baiduConf = ['url'=>'https://www.baidu.com/s?ie=utf-8&rn=20&wd=',
 			'proxy'=>false,
 			'beautyFunc'=>'baiduBeauty',
-			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
+			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'];
 			
 function baiduBeauty($html){
 	$html = '<base href="https://www.baidu.com/" target="_blank" />'.$html;
@@ -22,7 +22,7 @@ $googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwin
 			'proxyPort'=>8080,
 			'proxyType'=>'http',
 			'beautyFunc'=>'googleBeauty',
-			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
+			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'];
 
 function googleBeauty($html){
 	// Change the domain of this link below if your Google url is not ".com"
