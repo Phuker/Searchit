@@ -6,7 +6,6 @@ $baiduurl='./proxy/proxy.php?engine=baidu&q=';
 // 上层代理
 $baiduConf = ['url'=>'https://www.baidu.com/s?ie=utf-8&rn=20&wd=',
 			'proxy'=>false,
-			'sslCert'=>getcwd() . "/cert/baidu.com.crt",
 			'beautyFunc'=>'baiduBeauty',
 			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
 			
@@ -22,7 +21,6 @@ $googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwin
 			'proxyHost'=>'127.0.0.1',
 			'proxyPort'=>8080,
 			'proxyType'=>'http',
-			'sslCert'=>getcwd() . "/cert/google.com.crt",
 			'beautyFunc'=>'googleBeauty',
 			'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'];
 

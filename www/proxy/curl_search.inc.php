@@ -1,8 +1,7 @@
 <?php
 // e.g.
 // $httpProxy = ['proxyHost'=>'127.0.0.1','proxyPort'=>8580];
-// $sslCert = getcwd() . "/cert/google.com.crt";
-function httpGetProxy($url,$httpProxy=null,$sslCert=null,$userAgent=null){
+function httpGetProxy($url,$httpProxy=null,$sslVerify=true,$userAgent=null){
     $ch = curl_init($url);
     if($ch === FALSE){
         return FALSE;
@@ -52,10 +51,14 @@ function httpGetProxy($url,$httpProxy=null,$sslCert=null,$userAgent=null){
         curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
     }
     
-    if($sslCert !== null){
+    if($sslVerify !== false){
+        $sslCert = dirname(__FILE__) . "/cert/cacert.pem";
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_CAINFO, $sslCert);
+    } else {
+        // vulnerable to MITM attacks
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     }
     
     $html = curl_exec($ch);
@@ -86,7 +89,7 @@ function search($keyword,$engineConf){
     }
     $html = httpGetProxy($engineConf['url'] . urlencode($keyword),
             $httpProxy,
-            $engineConf['sslCert'],
+            true,
             $engineConf['userAgent']);
     if($html !== false){
         $html =  $engineConf['beautyFunc']($html);// post-process function
