@@ -10,15 +10,6 @@ function filter($str) {
 $siteName = 'SearchIt!';
 $getArg='q';    //GET method argument
 
-//$googleurl = 'http://guge.pro/?q='; // OK,宽，广告
-//$googleurl = 'http://www.guge.link/#q='; // OK，宽
-//$googleurl = 'http://gg.yon.hk/custom?newwindow=1&q='; // OK,窄
-//$googleurl = 'http://googo.pw/search?newwindow=1&q=test'; // 同源
-//$googleurl = 'http://go.hibenben.com/webhp?hl=zh-CN#hl=zh-CN&q='; // 同源
-//$googleurl ='http://g.yon.hk/search?newwindow=1&q='; // 同源
-//$googleurl = 'http://www.gufensoso.com/search/?q='; //自动变成全网页
-//$googleurl='http://www.google.com/custom?btnG=Search&newwindow=1&q='; //原始
-
 $keyword = filter($_GET[$getArg]);
 $keyword_link = urlencode($_GET[$getArg]);
 ?>
@@ -100,23 +91,8 @@ body{
 </div>
 <iframe src="<?php echo $baiduurl . $keyword_link; ?>" id="iframeLeft" bordercolor="#3E77B3"></iframe>
 <iframe src="<?php echo $googleurl . $keyword_link; ?>" id="iframeRight" bordercolor="#3E77B3"></iframe>
-<script type="text/javascript">
-var currentRight;
-var currentRight = true;
-function Switch(){
-	iframeLeft = document.getElementById('iframeLeft');
-	iframeLeft = document.getElementById('iframeLeft')
-	iframeRight = document.getElementById('iframeRight');
-	if(currentRight){
-		iframeRight.style['width'] = "0%";
-		iframeLeft.style['width'] = "100%";
-	} else {
-		iframeRight.style['width'] = "100%";
-		iframeLeft.style['width'] = "0%";
-	}
-	currentRight = !currentRight;
-}
-</script>
-<button onclick="Switch();" id="switchBtn">Switch</button>
+
+<button id="switchBtn">Switch</button>
+<script type="text/javascript" src="js/switch.js"></script>
 </body>
 </html>

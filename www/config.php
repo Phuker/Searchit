@@ -1,4 +1,9 @@
 <?php
+header('Referrer-Policy: no-referrer');
+header("Content-Security-Policy: referrer no-referrer; script-src 'self'; object-src 'none'; frame-src 'self';");
+header('X-Frame-Options: SAMEORIGIN');
+
+
 // iframe src
 $googleurl='./proxy/proxy.php?engine=google&q='; // 
 $baiduurl='./proxy/proxy.php?engine=baidu&q=';
@@ -13,6 +18,7 @@ function baiduBeauty($html){
 	$html = '<base href="https://www.baidu.com/" target="_blank" />'.$html;
 	$html = str_replace('<form id="form" name="f" action="/s" class="fm">', '<form id="form" name="f" action="" class="fm"><input type="hidden" name="engine" value="baidu">', $html);
 	$html = str_replace('<input id="kw" name="wd" class="s_ipt" value="', '<input id="kw" name="q" class="s_ipt" value="', $html);
+	$html = preg_replace('/<meta.*?name="referrer".*?>/','<meta content="no-referrer" name="referrer">',$html);
 	return str_replace('<div id="content_left">',  '<div id="content_left" style="padding-left:12px;">', $html);
 }
 
@@ -34,5 +40,6 @@ function googleBeauty($html){
 		function ($matches){
 			return '<a href="' . urldecode($matches[1]) . '"';
 		}, $html);
+	$html = preg_replace('/<meta.*?name="referrer".*?>/','<meta content="no-referrer" name="referrer">',$html);
 	return str_replace('<div id="center_col">', '<div id="center_col" style="margin:0;">', $html);
 }
