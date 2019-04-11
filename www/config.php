@@ -42,6 +42,7 @@ function googleBeauty($html){
 		function ($matches){
 			return '<a href="' . urldecode($matches[1]) . '"';
 		}, $html);
+	$html = preg_replace('/<a ([^>]*)ping="/', '<a ${1}gnip-nab="', $html);
 	$html = preg_replace('/<meta.*?name="referrer".*?>/','<meta content="no-referrer" name="referrer">',$html);
 	$html = str_replace('<div class="RNNXgb" jsname="RNNXgb"', '<div class="RNNXgb" jsname="RNNXgb" style="width:500px;"', $html);
 	$html = preg_replace('/<button ([^>]*)type="submit"/', '<button ${1}type="submit" disabled="disabled" style="cursor: not-allowed;"', $html);
