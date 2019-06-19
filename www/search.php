@@ -1,79 +1,92 @@
 <?PHP
-require('config.php');
-function filter($str) {
-	// HTML Entity
-	$str = trim ( htmlspecialchars ( $str, ENT_QUOTES ) );
-	$str = str_replace ( '\\', '&#92;', $str );
-	$str = str_replace ( '/', '&#47;', $str );
-	return $str;
-}
-$siteName = 'SearchIt!';
-$getArg='q';    //GET method argument
+require_once('config.php');
 
-$keyword = filter($_GET[$getArg]);
-$keyword_link = urlencode($_GET[$getArg]);
-?>
-<!DOCTYPE HTML>
+$keyword = $_GET[$search_url_param_key];
+$keyword_html = html_encode($keyword);
+$keyword_link = urlencode($keyword);
+
+if($log_enabled){
+	$log_line = date("Y-m-d h:i:s") . ' ' . log_get_ip() . ' ' . var_export($keyword, true) . "\n";
+	file_put_contents($log_file_path, $log_line, FILE_APPEND);
+}
+
+?><!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<title><?php echo $keyword; ?>_<?php echo $siteName; ?></title>
-<link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon">
-<link rel="icon" href="/favicon.ico" type="image/vnd.microsoft.icon">
+<title><?php echo $keyword_html; ?> - <?php echo html_encode($site_name); ?></title>
 <style type="text/css">
 html{
 	height:100%;
+	margin: 0px;
+	padding: 0px;
 }
 body{
-	height:100%;
+	height: 100%;
 	margin:0px;
+	padding: 0px;
+
+	background-color: #F1F1F1;
 }
 .head{
-	background-color:#F1F1F1;
-	height: 5%;
+	height: 4%;
 	padding:2px;
 	margin: 0px;
 }
 
-@media (max-width: 700px){
-	iframe{
-		height:89%;
-		margin: 0px;
-		border:0px;
-	}
-	#iframeLeft{
-		width:0%;
-		float:left;
-	}
-	#iframeRight{
-		width:100%;
-		float:right;
-	}
+input.search {
+	width: 75%;
+	height: 1.5em;
+}
 
-	#switchBtn{
+.container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: flex-start;
+
+	width: 100%;
+}
+
+
+
+iframe {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+
+	flex-shrink: 1;
+	flex-basis: auto;
+}
+
+#switchBtn{
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+@media (max-width: 767px){	
+	.container {
+		height: 90%;
+	}
+	.footer{
 		display: block;
 		width: 100%;
-		height: 2.2em;
-		margin:0;
+		height: 5%;
+		margin: 0px;
+		padding: 0px;
 	}
 }
 
-@media (min-width: 700px){
-	iframe{
-		height:94%;
-		margin: 0px;
-		border:0px;
+@media (min-width: 768px){
+	.container {
+		height: 95%;
 	}
-	#iframeLeft{
-		width:51% !important;
-		float:left;
-	}
-	#iframeRight{
-		width:48% !important;
-		float:right;
-	}
-	#switchBtn{
+	.footer{
 		display: none;
 	}
 }
@@ -83,16 +96,36 @@ body{
 <body>
 <div class="head">
     <center>
-    <form action="" method="GET" target=_parent>
-	    <input type="text" id="<?php echo $getArg; ?>" name="<?php echo $getArg; ?>" style="width:75%;height:1.6em;" value="<?php echo $keyword; ?>"/>
+    <form action="" method="GET">
+	    <input type="text" class="search" name="<?php echo html_encode($search_url_param_key); ?>" value="<?php echo $keyword_html; ?>" placeholder="<?php echo html_encode($search_placeholder); ?>" />
 	    <input type="submit" value="Search It!"/>
     </form>
     </center>
 </div>
-<iframe src="<?php echo $baiduurl . $keyword_link; ?>" id="iframeLeft" bordercolor="#3E77B3"></iframe>
-<iframe src="<?php echo $googleurl . $keyword_link; ?>" id="iframeRight" bordercolor="#3E77B3"></iframe>
 
-<button id="switchBtn">Switch</button>
+<div class="container">
+<?php
+foreach ($iframes as $index => $iframe_conf) {
+	$url = $iframe_conf['url'];
+	$width = $iframe_conf['width'];
+
+	$url = sprintf($url, $keyword_link);
+	$output = sprintf('<iframe src="%s" style="flex-grow: %d;" id="iframe_%d"></iframe>', $url, $width, $index);
+	echo $output  . "\n";
+}
+?>
+</div>
+<div class="footer">
+	<button id="switchBtn">Switch</button>	
+</div>
+
+
+<script type="text/javascript">
+	var default_iframe_index = <?php echo json_encode($default_iframe_index); ?>;
+	var current_iframe_index = default_iframe_index;
+	var iframe_count = <?php echo json_encode(count($iframes)); ?>;
+	var last_width = window.innerWidth;	
+</script>
 <script type="text/javascript" src="js/switch.js"></script>
 </body>
 </html>

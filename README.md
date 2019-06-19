@@ -1,98 +1,105 @@
-# SearchIt!  
+# Search It!  
 
-具有反向代理功能的仿制版百Google度(baigoogledu)  
-此项目主要为了解决天朝用户同时使用两种搜索引擎的问题。  
-*Across the Great Wall, we can reach every corner in the world.*  
+具有反向代理和内容过滤功能的元搜索引擎  
+Metasearch engine with reverse proxy and output filter features  
 
-## 概述  
-### 什么是百Google度  
-
-百Google度--在他们之间平均85%链接均不相同！   
-百google度是一种元搜索引擎，它综合了谷歌、百度两大搜索引擎。它的首页界面基本和谷歌、百度无异。只要在搜索框里键入关键词，就可搜索目标信息。不过，搜索界面很有特色，浏览器一分为二，左边是谷歌，右边是百度，搜出的信息和使用谷歌百度没有差别。  
-（来源：[百度百科](http://baike.baidu.com/item/baigoogledu)） 
-
-### 本仿制项目发展历史  
-
-为了翻墙和同时使用两种搜索引擎，我曾有过较长时间的研究：  
-  
-- 有时百Google度的Google栏失效。百Google度后来被封，无法正常使用。期间我用PHP仿制了一个类似的网站。  
-- Google响应头含有`x-frame-options:SAMEORIGIN`，无法放到非同源的iframe中，过去都是使用`http://www.google.com/custom?btnG=Search&newwindow=1&q=test`配合浏览器代理插件使用；或者使用没有此响应头的反向代理。但是反向代理网站被封的越来越多，越来越难找，Google的custom URL某日失效，自动跳转到普通的搜索。以上方法基本完全失效。  
-- 后来想办法一次搜索弹两个窗口，但是窗口太多使用不便。  
-- 后来使用curl，服务端搭建反向代理。（2016年7月）    
-
-### 文件功能  
-
-默认配置情况下：  
-
-- index.php  首页  
-- search.php?q=test 搜索test	 
-- config.php 配置文件，详见下文  
-- proxy/proxy.php 反向代理
-- `file_get_contents_search.inc.php` 使用 `file_get_contents()`获取网页的被包含文件
-- `curl_search.inc.php` 使用 `curl`获取网页的被包含文件
-
-### 配置:config.php  
-#### 浏览器相关（search.php中的两个iframe的src属性）  
-
-设置config.php 中的`$googleurl`和`$baiduurl`。这两个URL由**浏览器**请求。如需使用此项目中的代理，则需设置为：
-
-    $googleurl='./proxy/proxy.php?engine=google&q=';
-    $baiduurl='./proxy/proxy.php?engine=baidu&q=';
-
-此时两个iframe中的内容由服务器端，proxy.php向google.com等发出请求，然后将结果转发给浏览器。  
-如需直接连接（谷歌不推荐），设置为：
-
-    $googleurl = 'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=';
-    $baiduurl = 'https://www.baidu.com/s?ie=utf-8&rn=20&wd=';
-
-此时百度和谷歌两个iframe由浏览器直接发出请求。  
-**警告：此选项控制浏览器访问百度和谷歌的方式，如果浏览器在国内则无法正常访问谷歌**  
-**警告：由于Google的frame同源策略（x-frame-options:SAMEORIGIN），Google即使能连接也会无法正常显示。**  
+![screenshot1](./screenshots/screenshot1.png)
 
 
-#### 服务器相关：反向代理模块配置  
+## 运行环境  
 
-以`$googleConf`数组为例：  
-`url`指定访问的url（不含被搜索字符串）。  
-`proxy`,`proxyHost`,`proxyPort`,`proxyType`设置服务器的上层代理服务器。如果`proxy`为`false`，则其他代理设置会被忽略。使用`curl`时，可以通过设置`proxyType`支持`http`、`socks4`、`socks4a`、`socks5`、`socks5h`代理，推荐使用`socks5h`（即 `CURLPROXY_SOCKS5_HOSTNAME`），可以防止DNS污染。**警告：file_get_contents()好像只支持HTTP代理**  
-用curl方式时，如果使用SSL，需要设置`sslCert`设置证书。  
-`beautyFunc`指定进一步处理响应HTML的函数名。  
-`userAgent`设置服务端请求网页时使用的UserAgent字符串。  
-下例中，`googleBeauty`函数将服务端获取到的网页做进一步处理，适应iframe较窄的宽度。
+### 直接在 php 环境中运行
 
-	$googleConf = ['url'=>'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=',
-		'proxy'=>true,
-		'proxyHost'=>'127.0.0.1',
-		'proxyPort'=>8080,
-		'proxyType'=>'http',
-		'beautyFunc'=>'googleBeauty',
-		'userAgent'=>'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'];
-	
-	function googleBeauty($html){
-		$html = str_replace('<form class="tsf" action="/search" style="overflow:visible" id="tsf" method="GET" name="f" onsubmit="return q.value!=\'\'" role="search">', 
-			'<form class="tsf" action="" style="overflow:visible" id="tsf" method="GET" name="f" onsubmit="return q.value!=\'\'" role="search"><input type="hidden" name="engine" value="google">', 
-			$html);
-		$html = str_replace('<div class="sbibtd">', 
-			'<div class="sbibtd" style="width:500px;">', 
-			$html);
-		return str_replace('<div id="center_col">',
-			 '<div id="center_col" style="margin:0;">',
-			 $html);
-	}
-  
-有时百度根据UserAgent不支持HTTPS(*也可能国外某些地区没有HTTPS*)（例如GAE，表现为`file_get_contents()`请求proxy.php时无限刷新，原因是实际会返回JavaScript：`location.replace(location.href.replace("https://","http://"));`等。此时将proxy_conf.php中`https://www.baidu.com/`改为`http://www.baidu.com/`。  
-用GAE的App Engine SDK 1.9.40测试发现，此环境的`file_get_contents()`无法正常设置资源流上下文。UserAgent保持为：` 'AppEngine-Google; (+http://code.google.com/appengine; appid: dev~xxxxxxx)'`。推测GAE上有相同的问题。
+php 最好安装 [cURL 扩展](http://php.net/manual/zh/book.curl.php)   
+把 `www` 目录的内容复制到任意 web 子目录，然后按照下文配置  
 
-#### 关于`curl` 和 `file_get_contents()`两种获取网页方式  
+### docker 直接开放 web 端口
 
-使用curl可以较好地使用代理服务器，但是需要安装该extension，HTTPS如果出现验证证书错误需要手动提供证书（/proxy/cert目录）。  
-`file_get_contents()`无需安装extension，可以在GAE上直接使用。理论上用其`$context`参数可以控制使用代理服务器，但是在本机测试无法正常使用，出现各种错误。**（似乎只能代理HTTP，无法代理HTTPS）**  
-**由于file_get_contents()设置代理复杂而且缺乏功能和文档，建议使用前者，放弃后者。**  
-目前`proxy/proxy.php`自动判断是否安装`curl`库，根据结果require:优先`curl_search.inc.php`，其次`file_get_contents_search.inc.php`。  
+编辑 `docker-compose.yml` 修改端口，用 `docker-compose` 启动  
 
-附：安装[php_curl库](http://php.net/manual/zh/book.curl.php)  
+### docker + 反向代理
 
-### 测试
+可以用 apache/nginx 反向代理，实现 HTTPS 访问等效果   
+推荐编辑 `docker-compose.yml` listen `127.0.0.1`   
+
+Apache 的配置文件示例：  
+
+    # Searchit, overwrite XFF
+    <Location "/mysearch/">        ProxyPass "http://127.0.0.1:8080/"
+        ProxyPassReverse "http://127.0.0.1:8080/"
+        
+        ProxyAddHeaders On        RequestHeader unset X-Forwarded-Host        RequestHeader unset X-Forwarded-For        RequestHeader unset X-Forwarded-Server
+    </Location>
+
+### App Engine 云服务
+
+某些 App Engine 功能不全，可能有问题  
+
+## 配置
+
+一般地，用户只需要编辑 `www/config.php` 和 `www/engines.d/*.php`  
+默认配置已经足够完善，以下内容按需配置  
+
+### 添加自定义搜索引擎
+
+在 `www/engines.d/` 中仿照原有代码添加搜索引擎的反向代理配置    
+新增的搜索引擎反向代理配置需要在 `www/config.php` 的 `$proxy_enabled_engines` 中激活  
+
+### 修改搜索引擎配置
+
+在 `www/engines.d/` 中找到对应的配置文件，可以修改服务端访问搜索引擎的代理服务器，HTML 过滤函数等  
+修改 `proxy` 可以修改搜索引擎配置，`type` 支持的所有代理类型见 `www/proxy/curl_search.inc.php`。如果存在 DNS 污染，使用 `socks5h` 等。    
+只有安装了 `cURL` PHP 扩展才支持代理配置（不想支持 `file_get_contents()` 函数）。 
+
+### 配置浏览器 iframe
+
+在 `www/config.php` 的 `$iframes` 中可以配置浏览器中呈现的 `iframe`  
+推荐使用 `proxy.php` 通过反向代理间接访问搜索引擎，而不要在浏览器直接请求搜索引擎，否则会有隐私、可用性（GFW、`x-frame-options` 头）等问题。    
+
+
+## 技术细节
+
+### 自动判断 `cURL` 扩展存在 
+
+`www/proxy/proxy.php` 自动判断是否存在 `cURL` 扩展，如果存在则使用之，否则用 `file_get_contents()` 在服务端发出 HTTP 请求  
+
+### 反向代理保护隐私
+
+- 通过设置 `Content-Security-Policy` 响应头，阻止浏览器加载搜索引擎页面的任何 JavaScript 代码  
+- 通过设置 `Referrer-Policy` 响应头，阻止浏览器在访问搜索结果时发送 `Referrer` 请求头  
+- 通过 `www/engines.d/*.php` 中的 `engine_output_filter()` 函数，尝试对搜索引擎搜索结果URL 解码得到真实 URL，同时删除 `<a>` 标签的 `ping` 属性，防止发送跟踪请求  
+
+## FAQ
+
+### cURL 证书错误
+
+cURL 使用的来自于 [CA certificates extracted from Mozilla](https://curl.haxx.se/docs/caextract.html) 的根证书 `www/proxy/cert/cacert.pem` 可能已经过期，可以尝试手动更新  
+
+
+### 百度无限刷新
+
+原因可能是 cURL 错误设置 `User-Agent`，或者某些 App Engine 平台的 `file_get_contents()` 无法设置 `User-Agent`。这些情况下，百度根据 `User-Agent` 判断客户端不支持 HTTPS，会返回：  
+
+    location.replace(location.href.replace("https://","http://"));
+
+需要正确设置 `User-Agent`，设置为任意桌面端现代浏览器的 `User-Agent` 即可。  
+如果某些平台无法设置，可以尝试修改搜索引擎的反向代理URL，把 `https://www.baidu.com/` 改为 `http://www.baidu.com/`。  
+
+### Google 提示 `需要网站所有者处理的错误：网站密钥的网域无效`
+
+有的网络环境下，通过 IPv6 访问 Google 会提示 `需要网站所有者处理的错误：网站密钥的网域无效`。可以设置 `/etc/hosts` 解决。  
+
+
+## 如何 debug
+
+### 开启详细输出
+
+`config.php` 中修改 `$debug`，在响应头和响应体会有额外的输出。  
+
+### 测试关键词
+
+测试程序有没有正确编码和解码关键词：  
+
 - test
 - `<script>alert(1);</script>`
 - AT&T
@@ -100,6 +107,11 @@
 - 1+1=?
 - 汉字
 
-### 报错怎么办  
- 
-1. 有的网络环境下，通过 IPv6 访问 Google 会提示 `需要网站所有者处理的错误：网站密钥的网域无效`。可以设置 /etc/hosts 解决。 
+
+## 其他
+
+[历史文档](history.md)  
+
+## License
+
+this repo is licensed under the **GNU General Public License v3.0**
