@@ -1,4 +1,3 @@
-
 version: '3'
 services:
   web:
@@ -9,4 +8,4 @@ services:
     volumes:
       - ./www/:/var/www/html:ro
 
-    
+
