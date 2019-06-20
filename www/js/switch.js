@@ -25,16 +25,16 @@ function iframe_loop_switch(){
 
 function resize_handler(){
 	var now_width = window.innerWidth;
-	if(last_width >= 768 && now_width < 768){
+	if(last_width >= width_threshold && now_width < width_threshold){
 		iframe_switch_to(current_iframe_index);
 	} 
-	if(last_width < 768 && now_width >= 768){
+	if(last_width < width_threshold && now_width >= width_threshold){
 		iframe_show_all();
 	}
 	last_width = now_width;
 }
 
-if(window.innerWidth < 768){
+if(window.innerWidth < width_threshold){
 	iframe_switch_to(current_iframe_index);
 }
 

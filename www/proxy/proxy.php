@@ -15,9 +15,10 @@ function exit_help($msg){
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Error</title>
 </head>
-<body>
+<body style="background: #fff;">
 <h1>Error</h1>
 <p>$msg</p>
 </body>
@@ -34,15 +35,15 @@ if(isset($_GET['engine']) && isset($_GET['q'])){
 }
 
 if(!check_engine_name($user_engine)){
-    exit_help('bad engine name');
-}
-
-if(!is_nonempty_str($user_query)){
-    exit_help('empty query');
+    exit_help('bad engine name: ' . $user_engine);
 }
 
 if(in_array($user_engine, $proxy_enabled_engines) !== true){
-    exit_help('engine not exist');
+    exit_help('engine not exist: ' . $user_engine);
+}
+
+if(!is_nonempty_str($user_query)){
+    exit_help('Empty query. (Using engine: ' . $user_engine . ')');
 }
 
 require_once '../engines.d/' . $user_engine . '.php';

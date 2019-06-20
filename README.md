@@ -19,8 +19,8 @@ php 最好安装 [cURL 扩展](http://php.net/manual/zh/book.curl.php)
 
 ### docker + 反向代理
 
-可以用 apache/nginx 反向代理，实现 HTTPS 访问等效果   
-推荐编辑 `docker-compose.yml` listen `127.0.0.1`   
+**VPS 部署推荐方案** 用 apache/nginx 反向代理，实现 HTTPS 访问等效果   
+编辑 `docker-compose.yml`，只监听 `127.0.0.1`   
 
 Apache 的配置文件示例：  
 
@@ -67,7 +67,7 @@ Apache 的配置文件示例：
 
 - 通过设置 `Content-Security-Policy` 响应头，阻止浏览器加载搜索引擎页面的任何 JavaScript 代码  
 - 通过设置 `Referrer-Policy` 响应头，阻止浏览器在访问搜索结果时发送 `Referrer` 请求头  
-- 通过 `www/engines.d/*.php` 中的 `engine_output_filter()` 函数，尝试对搜索引擎搜索结果URL 解码得到真实 URL，同时删除 `<a>` 标签的 `ping` 属性，防止发送跟踪请求  
+- 通过 `www/engines.d/*.php` 中的 `engine_output_filter()` 函数，尝试对搜索引擎搜索结果URL 解码得到真实 URL，同时删除 `<a>` 标签的 `ping` 属性，防止发送跟踪请求。同时可以修改网页样式，禁用原有的搜索框。  
 
 ## FAQ
 
@@ -89,6 +89,9 @@ cURL 使用的来自于 [CA certificates extracted from Mozilla](https://curl.ha
 
 有的网络环境下，通过 IPv6 访问 Google 会提示 `需要网站所有者处理的错误：网站密钥的网域无效`。可以设置 `/etc/hosts` 解决。  
 
+### 浏览器前端显示布局异常
+
+鄙人的 HTML/CSS/JavaScript 都是乱写的，只测试了 Chrome 和 Firefox 浏览器，随缘兼容 Safari，不知道怎么兼容 iOS 浏览器，不打算兼容 IE 以及一切杂牌浏览器。如果发现显示问题并且知道怎么改，欢迎指正。  
 
 ## 如何 debug
 
