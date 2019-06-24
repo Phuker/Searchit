@@ -110,6 +110,12 @@ cURL 使用的来自于 [CA certificates extracted from Mozilla](https://curl.ha
 - 1+1=?
 - 汉字
 
+测试搜索引擎配置：  
+
+- ip
+- my ip
+- check user agent
+- my location
 
 ## 其他
 
