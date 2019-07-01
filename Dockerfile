@@ -9,8 +9,8 @@ timeout 4 bash -c "</dev/tcp/google.com/443" || \
 { \
     echo 'In China, use mirror...' && \
     echo 'change apt source' && \
-    find /etc/apt/ -type f -name '*.list' -print -exec sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' {} \; && \
-    find /etc/apt/ -type f -name '*.list' -print -exec sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' {} \; && \
+    find /etc/apt/ -type f -name '*.list' -print -exec sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' {} \; && \
+    find /etc/apt/ -type f -name '*.list' -print -exec sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' {} \; && \
     echo '- - - - - apt source list [start] - - - - -' && \
     find /etc/apt/ -type f -name '*.list' -print -exec cat {} \; && \
     echo '- - - - - apt source list [end] - - - - -' && \
