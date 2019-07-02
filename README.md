@@ -22,10 +22,16 @@ php 最好安装 [cURL 扩展](http://php.net/manual/zh/book.curl.php)
 **VPS 部署推荐方案** 用 apache/nginx 反向代理，实现 HTTPS 访问等效果   
 编辑 `docker-compose.yml`，只监听 `127.0.0.1`   
 
+Apache 开启 mod：  
+
+    a2enmod proxy proxy_http headers alias
+
 Apache 的配置文件示例：  
 
     # Searchit, overwrite XFF
-    <Location "/mysearch/">        ProxyPass "http://127.0.0.1:8080/"
+    Redirect permanent "/mysearch" "/mysearch/"
+    <Location "/mysearch/">
+        ProxyPass "http://127.0.0.1:8080/"
         ProxyPassReverse "http://127.0.0.1:8080/"
         
         ProxyAddHeaders On        RequestHeader unset X-Forwarded-Host        RequestHeader unset X-Forwarded-For        RequestHeader unset X-Forwarded-Server

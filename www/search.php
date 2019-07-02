@@ -107,6 +107,8 @@ iframe {
 
 	flex-shrink: 1;
 	flex-basis: auto;
+
+	background: url(./images/loading.gif) center center no-repeat; 
 }
 
 .footer{
