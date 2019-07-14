@@ -21,6 +21,7 @@ function exit_help($msg){
 <body style="background: #fff;">
 <h1>Error</h1>
 <p>$msg</p>
+<script src="js/reload.js"></script>
 </body>
 </html>
 EOF;

@@ -14,7 +14,8 @@ function http_get($url, $proxy=null, $ssl_verify=true, $user_agent=null, $debug=
     }
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // return string. 获取的信息以字符串返回，而不是直接输出
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE); // follow redirect
-    curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 
     if($proxy !== false){
         $proxy_type = $proxy['type'];

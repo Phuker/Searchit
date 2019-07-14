@@ -1,7 +1,12 @@
 <?PHP
 require_once('config.php');
 
-$keyword = $_GET[$search_url_param_key];
+$keyword = @$_GET[$search_url_param_key];
+if(!is_nonempty_str($keyword)){
+	header('Location: index.php');
+	exit();
+}
+
 $keyword_html = html_encode($keyword);
 $keyword_link = urlencode($keyword);
 
