@@ -35,7 +35,7 @@ $proxy_enabled_engines = [
 
 $log_enabled = false;
 $log_file_path = '/tmp/searchit.log';
-$log_time_format = 'Y-m-d h:i:s P';
+$log_time_format = 'Y-m-d H:i:s P';
 $log_ip_trust_headers = [
     // 'HTTP_CF_CONNECTING_IP',  // Cloudflare
     // 'HTTP_X_FORWARDED_FOR',   // X-Forwarded-For
