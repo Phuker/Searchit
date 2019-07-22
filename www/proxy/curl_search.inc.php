@@ -12,6 +12,7 @@ function http_get($url, $proxy=null, $ssl_verify=true, $user_agent=null, $debug=
     if($user_agent !== null){
         curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
     }
+    curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // return string. 获取的信息以字符串返回，而不是直接输出
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE); // follow redirect
     curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
