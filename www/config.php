@@ -41,9 +41,13 @@ $log_ip_trust_headers = [
     // 'HTTP_X_FORWARDED_FOR',   // X-Forwarded-For
 ];
 
-// - - - - debug header and output - - - -
+// - - - - debug - - - -
 
-$debug = false;
+// define('SEARCHIT_DEBUG', true);
+define('SEARCHIT_DEBUG', false);
+
+define('SEARCHIT_SSL_VERIFY', true);
+// define('SEARCHIT_SSL_VERIFY', false);
 
 // - - - - HTTP headers - - - - 
 
@@ -59,8 +63,6 @@ $headers_3rd_party = [
     "Content-Security-Policy: referrer no-referrer; script-src 'self'; object-src 'none'; frame-src 'self'",
 ];
 
-
-
 // - - - - - - - - - - - - [ user config end ] - - - - - - - - - - - - 
 
 require_once('functions.php');
@@ -71,9 +73,12 @@ if($log_enabled){
     $index_page_info .= 'Notice: search history log enabled. ';
 }
 
-if($debug){
+if(defined('SEARCHIT_DEBUG') && SEARCHIT_DEBUG) {
     $index_page_info .= 'Notice: debug enabled. ';
 }
 
+if(defined('SEARCHIT_SSL_VERIFY') && (!SEARCHIT_SSL_VERIFY)) {
+    $index_page_info .= 'Notice: SSL verify disabled. ';
+}
 
 

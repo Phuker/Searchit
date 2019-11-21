@@ -70,5 +70,16 @@ function send_headers($headers){
     }
 }
 
+// function debug_info_header($s) {
+//     if(defined('SEARCHIT_DEBUG') && SEARCHIT_DEBUG) {
+//         header('X-Searchit-Debug: ' . urlencode($s), false);
+//     }
+// }
+
+function debug_info_output($s) {
+    if(defined('SEARCHIT_DEBUG') && SEARCHIT_DEBUG) {
+        echo '<code>[DEBUG] ' . htmlspecialchars($s) . "</code><br />\n";
+    }
+}
 
 

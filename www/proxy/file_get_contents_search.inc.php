@@ -1,9 +1,5 @@
 <?php
-// fallback functions. use file_get_contents() instead of curl.
-
-if($debug){
-    header('X-Debug: Missing curl', false);
-}
+debug_info_output('Missing cURL, fallback to file_get_contents()');
 
 function http_get($url, $user_agent=null){
     // HTTP context options, see:

@@ -2,7 +2,10 @@
 $engine_conf = [
     'url' => 'https://www.baidu.com/s?ie=utf-8&rn=20&wd=%s',
     'proxy' => false,
-    'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.90 Safari/537.36',
+    'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
+    'headers' => [
+        'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,ja;q=0.6',
+    ]
 ];
 
 function engine_output_filter($html){
