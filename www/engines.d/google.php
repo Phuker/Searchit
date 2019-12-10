@@ -1,6 +1,6 @@
 <?php
 $engine_conf = [
-    'url' => 'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&q=%s',
+    'url' => 'https://www.google.com/search?site=webhp&source=hp&newwindow=1&hl=zh-Hans&num=20&nfpr=1&q=%s',
     'proxy' => false,
     // 'proxy'=> [ 'host' => '127.0.0.1', 'port' => 1080, 'type' => 'socks5h'],
     'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
