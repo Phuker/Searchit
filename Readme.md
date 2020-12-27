@@ -6,7 +6,6 @@ Metasearch engine with reverse proxy and output filter features
 
 ![screenshot1](./screenshots/screenshot1.png)
 
-
 ## 运行环境
 
 ### 直接在 php 环境中运行
@@ -140,6 +139,10 @@ location.replace(location.href.replace("https://","http://"));
 - my ip
 - check user agent
 - my location
+
+## Demo
+
+<span title="不想喝茶">无</span>
 
 ## 其他
 
