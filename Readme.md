@@ -10,13 +10,13 @@ Metasearch engine with reverse proxy and output filter features
 
 ### 直接在 php 环境中运行
 
-php 最好安装 [cURL 扩展](http://php.net/manual/zh/book.curl.php) 
+php 最好安装 [cURL 扩展](http://php.net/manual/zh/book.curl.php)
 
 把 `www` 目录的内容复制到任意 web 子目录，然后按照下文配置
 
 ### docker 直接开放 web 端口
 
-编辑 `docker-compose.yml` 修改端口，用 `docker-compose` 启动
+编辑 `docker-compose.yml` 修改端口，用 `docker compose` 启动
 
 ### docker + 反向代理
 
@@ -38,7 +38,7 @@ Redirect permanent "/mysearch" "/mysearch/"
 <Location "/mysearch/">
     ProxyPass "http://127.0.0.1:8080/"
     ProxyPassReverse "http://127.0.0.1:8080/"
-    
+
     ProxyAddHeaders On
     RequestHeader unset X-Forwarded-Host
     RequestHeader unset X-Forwarded-For
@@ -68,7 +68,7 @@ Redirect permanent "/mysearch" "/mysearch/"
 
 修改 `proxy` 可以修改搜索引擎配置，`type` 支持的所有代理类型见 `www/proxy/curl_search.inc.php`。如果存在 DNS 污染，使用 `socks5h` 等。
 
-只有安装了 `cURL` PHP 扩展才支持代理配置（不想支持 `file_get_contents()` 函数）。 
+只有安装了 `cURL` PHP 扩展才支持代理配置（不想支持 `file_get_contents()` 函数）。
 
 ### 配置浏览器 iframe
 
@@ -78,7 +78,7 @@ Redirect permanent "/mysearch" "/mysearch/"
 
 ## 技术细节
 
-### 自动判断 `cURL` 扩展存在 
+### 自动判断 `cURL` 扩展存在
 
 `www/proxy/proxy.php` 自动判断是否存在 `cURL` 扩展，如果存在则使用之，否则用 `file_get_contents()` 在服务端发出 HTTP 请求
 
